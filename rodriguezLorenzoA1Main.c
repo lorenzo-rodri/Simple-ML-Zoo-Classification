@@ -2,14 +2,17 @@
 
 #include "givenA1.h"
 
-int main(){
+int main(int argc, char *argv[]){
 
+    char fileName[30];
     int result, hammingDistance = 0;
     float euclideanDistance, jaccardSimilarity = 0.0;
     struct Animal dataZoo [NUM_SAMPLES];
 
+    strcpy(fileName, argv[1]);
+
     //TESTING Task 1
-    result = readFromFile("a1Data.txt", dataZoo);
+    result = readFromFile(fileName, dataZoo);
     printf("%d\n", result);
     printf("%s\n", dataZoo[0].animalName);
     printf("%s\n", dataZoo[3].animalName);
@@ -22,5 +25,3 @@ int main(){
     return 0;
 }
 
-//aardvark 1 0 0 1 0 0 1 1 1 1 0 0 4 0 0 1 1
-//antelope 1 0 0 1 0 0 0 1 1 1 0 0 4 1 0 1 1
