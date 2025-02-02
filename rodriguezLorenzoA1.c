@@ -48,7 +48,10 @@ int readFromFile (char fName [30], struct Animal dataZoo [NUM_SAMPLES]){
 /* TASK 2: Calculate euclidean distance, hamming distance, and jaccard similarity*/
 void distanceFunctions (int vector1 [NUM_FEATURES], int vector2 [NUM_FEATURES], float * euclideanDistance, int * hammingDistance, float * jaccardSimilarity){
     int tempResult = 0;
-    float oneMatch, zeroMatch = 0.0;
+    float oneMatch = 0.0; 
+    float zeroMatch = 0.0;
+
+    *euclideanDistance = 0.0; // Reset value to avoid accumulation issues
 
     // Calculate euclidean distance
     for (int i=0; i<NUM_FEATURES; i++){
@@ -143,11 +146,45 @@ void findKNearestNeighbors (struct Animal dataZoo [NUM_SAMPLES], int newSample [
 
 /*TASK 4: */
 int predictClass (struct Animal dataZoo [NUM_SAMPLES], int newSample [NUM_FEATURES], int whichDistanceFunction, int k){
-    //use findnearestneighbors to get the nearest neighbors based off of one of the types of distances
-    //then is uses the class for each of the k nearnest neighhbors and uses the most frequent class as the predicted class
+    //use findknearestneighbors to get the nearest neighbors based off of one of the types of distances
+    //then it uses the class for each of the k nearnest neighbors and uses the most frequent class as the predicted class
     // if 2 class labels are equally as frequent, we will use the smallest one
-    // this fun takes in the 16 sample features which distance type were working with, and then l which is the number of nearest neighbors we want to find
+    // this fun takes in the 16 sample features which distance type were working with, and then k which is the number of nearest neighbors we want to find
+    int kNearestNeighbors[NUM_SAMPLES];
+    int classFrequency[NUM_CLASSES];   //stores the frequency 
+    int predictedClass = -1; // The class to return
+    int maxFrequency = 0;
+    int tempClassLabel = 0;
+
+    // Set class occur=ance counting array to all zero
+    for (int i = 0; i < NUM_CLASSES; i++) {
+        classFrequency[i] = 0;
+    }
+    // Get k nearest neighbors and store indices in an array
+    findKNearestNeighbors(dataZoo, newSample, k, whichDistanceFunction, kNearestNeighbors);
+
+    // Count occurrences of each class label in k nearest neighbors
+    for (int i = 0; i < k; i++) {
+        tempClassLabel = dataZoo[kNearestNeighbors[i]-1].classLabel;   // -1 fixes weird indexing issue where it accesses the index after for some reason
+        printf("\nClass label for index %d: %d", kNearestNeighbors[i], tempClassLabel);
+        classFrequency[tempClassLabel]++; // Increment count for this class
+    }
+    for (int i = 0; i < NUM_CLASSES; i++) {
+        printf("\n%d", classFrequency[i]);
+    }
+
+    // Find the most frequent class label (use smallest in case of tie)
+    for (int i = 0; i < NUM_CLASSES; i++) {
+        if (classFrequency[i] > maxFrequency) {
+            maxFrequency = classFrequency[i];
+            predictedClass = i; // Store the class with highest frequency
+        }
+    }
+
+    return predictedClass;
+    
 }
 
+/*TASK 5: */
 //QUESTIONS: why do i start from i=1 in the findknearestneighbors --- caa I add the sorting function prototypes to the header file
 
