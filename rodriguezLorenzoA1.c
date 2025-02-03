@@ -52,6 +52,7 @@ void distanceFunctions (int vector1 [NUM_FEATURES], int vector2 [NUM_FEATURES], 
     float zeroMatch = 0.0;
 
     *euclideanDistance = 0.0; // Reset value to avoid accumulation issues
+    *hammingDistance = 0; // Reset value to avoid accumulation issues
 
     // Calculate euclidean distance
     for (int i=0; i<NUM_FEATURES; i++){
@@ -109,7 +110,8 @@ void findKNearestNeighbors (struct Animal dataZoo [NUM_SAMPLES], int newSample [
 
     for (int i=0; i<NUM_SAMPLES; i++){  // loop through all sample structs for their features
         int hammingDistance = 0;
-        float euclideanDistance, jaccardSimilarity = 0.0;
+        float euclideanDistance = 0.0;
+        float jaccardSimilarity = 0.0;
         distanceFunctions(newSample, dataZoo[i].features, &euclideanDistance, &hammingDistance, &jaccardSimilarity); //get diistances for each thing
        
         // Populate distances into a temporary array 
@@ -128,7 +130,7 @@ void findKNearestNeighbors (struct Animal dataZoo [NUM_SAMPLES], int newSample [
                 break;
         }
     }
-
+    
     // Use sorting functions to sort the unsortedArray
     if (whichDistanceFunction == 1 || whichDistanceFunction == 2){
         qsort(distanceArray, NUM_SAMPLES, sizeof(distanceArray[0]), compareDescending);
@@ -136,12 +138,12 @@ void findKNearestNeighbors (struct Animal dataZoo [NUM_SAMPLES], int newSample [
     else{
         qsort(distanceArray, NUM_SAMPLES, sizeof(distanceArray[0]), compareAscending);
     }
-    
 
     // Extract the indices of the k nearest neighbors
     for (int i = 0; i < k; i++) {
         kNearestNeighbors[i] = (int)distanceArray[i][0]; // Store only indices
     }
+    printf("The nearest neighbors to this sample are %d, %d, %d, %d, %d", kNearestNeighbors[0],kNearestNeighbors[1],kNearestNeighbors[2],kNearestNeighbors[3],kNearestNeighbors[4]);
 }
 
 /*TASK 4: */
@@ -163,7 +165,7 @@ int predictClass (struct Animal dataZoo [NUM_SAMPLES], int newSample [NUM_FEATUR
 
     // Count occurrences of each class label in k nearest neighbors
     for (int i = 0; i < k; i++) {
-        tempClassLabel = dataZoo[kNearestNeighbors[i]-1].classLabel;   // -1 fixes weird indexing issue where it accesses the index after for some reason
+        tempClassLabel = dataZoo[kNearestNeighbors[i]-1].classLabel;   // -1 fixes weird indexing issue where it accesses the index after for some reason 
         printf("\nClass label for index %d: %d", kNearestNeighbors[i], tempClassLabel);
         classFrequency[tempClassLabel]++; // Increment count for this class
     }
@@ -185,11 +187,7 @@ int predictClass (struct Animal dataZoo [NUM_SAMPLES], int newSample [NUM_FEATUR
 
 /*TASK 5: */
 //QUESTIONS: why do i start from i=1 in the findknearestneighbors --- caa I add the sorting function prototypes to the header file
-float findAccuracy (struct Animal dataZoo [NUM_SAMPLES], int whichDistanceFunction, struct Animal testData [NUM_TEST_DATA], int k){
-    //prediction is correct if labed found == it's actual label
-    //accuracy = num correct predictions / total predictions
-    // test dataset is of size NUM_TEST_DATA
-    // this function must predict the class of each data given in testData.csv and it to compute accuracy
+float findAccuracy(struct Animal dataZoo [NUM_SAMPLES], int whichDistanceFunction, struct Animal testData [NUM_TEST_DATA], int k){
 
     int prediction = 0;
     int correctPredictions = 0;
@@ -210,7 +208,8 @@ float findAccuracy (struct Animal dataZoo [NUM_SAMPLES], int whichDistanceFuncti
     }
 
     // Calculate accuracy and return it
-    accuracy = correctPredictions / NUM_TEST_DATA;
+    accuracy = (float)correctPredictions / NUM_TEST_DATA;
+    
     return accuracy;
 
 }
