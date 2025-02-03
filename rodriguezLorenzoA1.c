@@ -146,20 +146,18 @@ void findKNearestNeighbors (struct Animal dataZoo [NUM_SAMPLES], int newSample [
 
 /*TASK 4: */
 int predictClass (struct Animal dataZoo [NUM_SAMPLES], int newSample [NUM_FEATURES], int whichDistanceFunction, int k){
-    //use findknearestneighbors to get the nearest neighbors based off of one of the types of distances
-    //then it uses the class for each of the k nearnest neighbors and uses the most frequent class as the predicted class
-    // if 2 class labels are equally as frequent, we will use the smallest one
-    // this fun takes in the 16 sample features which distance type were working with, and then k which is the number of nearest neighbors we want to find
+    
     int kNearestNeighbors[NUM_SAMPLES];
-    int classFrequency[NUM_CLASSES];   //stores the frequency 
+    int classFrequency[NUM_CLASSES];   //stores the frequency of each class number (1-7)
     int predictedClass = -1; // The class to return
     int maxFrequency = 0;
     int tempClassLabel = 0;
 
-    // Set class occur=ance counting array to all zero
+    // Set class occurance counting array to all zero
     for (int i = 0; i < NUM_CLASSES; i++) {
         classFrequency[i] = 0;
     }
+
     // Get k nearest neighbors and store indices in an array
     findKNearestNeighbors(dataZoo, newSample, k, whichDistanceFunction, kNearestNeighbors);
 
@@ -187,4 +185,32 @@ int predictClass (struct Animal dataZoo [NUM_SAMPLES], int newSample [NUM_FEATUR
 
 /*TASK 5: */
 //QUESTIONS: why do i start from i=1 in the findknearestneighbors --- caa I add the sorting function prototypes to the header file
+float findAccuracy (struct Animal dataZoo [NUM_SAMPLES], int whichDistanceFunction, struct Animal testData [NUM_TEST_DATA], int k){
+    //prediction is correct if labed found == it's actual label
+    //accuracy = num correct predictions / total predictions
+    // test dataset is of size NUM_TEST_DATA
+    // this function must predict the class of each data given in testData.csv and it to compute accuracy
 
+    int prediction = 0;
+    int correctPredictions = 0;
+    int predictionsArr[NUM_TEST_DATA]; // Stores preditions, idices match indices of testData.csv
+    float accuracy = 0.0;
+
+    // Get predictions for a1Data and store in predictionsArr at corresponding indices
+    for (int i=0; i<NUM_TEST_DATA; i++){
+        prediction = predictClass(dataZoo, testData[i].features, whichDistanceFunction, k);
+        predictionsArr[i] = prediction;
+    }
+
+    // Compare predicted classLabel and actual classLabel
+    for (int i=0; i<NUM_TEST_DATA; i++){
+        if (predictionsArr[i] == testData[i].classLabel){
+            correctPredictions++;
+        }
+    }
+
+    // Calculate accuracy and return it
+    accuracy = correctPredictions / NUM_TEST_DATA;
+    return accuracy;
+
+}
