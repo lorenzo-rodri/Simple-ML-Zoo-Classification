@@ -28,7 +28,6 @@ int readFromFile (char fName [30], struct Animal dataZoo [NUM_SAMPLES]){
         
         // Get animal name and store at element line_number of struct array
         fscanf(fPtr, "%s", dataZoo[line_number].animalName);   
-        //strcpy(dataZoo[line_number].animalName, name);   // Add name to struct of a specified line number MAY NEED TO USE THIS IF U GET ERROR
         
         // Get animal features
         for (int i = 0; i<NUM_FEATURES; i++){
@@ -40,7 +39,7 @@ int readFromFile (char fName [30], struct Animal dataZoo [NUM_SAMPLES]){
         
         line_number++;
     }
-    //printf("Populated animals: %s", dataZoo[line_number].animalName);
+    
     fclose(fPtr);
     return 1;
 }
@@ -145,7 +144,7 @@ void findKNearestNeighbors (struct Animal dataZoo [NUM_SAMPLES], int newSample [
     }
 }
 
-/*TASK 4: */
+/*TASK 4: predict the class of a given sample*/
 int predictClass (struct Animal dataZoo [NUM_SAMPLES], int newSample [NUM_FEATURES], int whichDistanceFunction, int k){
     
     int kNearestNeighbors[NUM_SAMPLES];
@@ -182,8 +181,7 @@ int predictClass (struct Animal dataZoo [NUM_SAMPLES], int newSample [NUM_FEATUR
     
 }
 
-/*TASK 5: */
-//QUESTIONS: why do i start from i=1 in the findknearestneighbors --- caa I add the sorting function prototypes to the header file
+/*TASK 5: output the accuracy of this program when compared with the actual classLabel result*/
 float findAccuracy(struct Animal dataZoo [NUM_SAMPLES], int whichDistanceFunction, struct Animal testData [NUM_TEST_DATA], int k){
 
     int prediction = 0;
