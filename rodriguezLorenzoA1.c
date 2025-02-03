@@ -80,10 +80,10 @@ void distanceFunctions (int vector1 [NUM_FEATURES], int vector2 [NUM_FEATURES], 
     }
 
     if (NUM_FEATURES - zeroMatch > 0){
-    *jaccardSimilarity = oneMatch / (NUM_FEATURES - zeroMatch);
+        *jaccardSimilarity = oneMatch / (NUM_FEATURES - zeroMatch);
     } 
     else{
-    *jaccardSimilarity = 0.0; // for the case where all features are 0
+        *jaccardSimilarity = 0.0; // for the case where all features are 0
     }
 
 }
