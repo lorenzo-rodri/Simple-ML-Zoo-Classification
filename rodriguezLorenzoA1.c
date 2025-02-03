@@ -143,7 +143,6 @@ void findKNearestNeighbors (struct Animal dataZoo [NUM_SAMPLES], int newSample [
     for (int i = 0; i < k; i++) {
         kNearestNeighbors[i] = (int)distanceArray[i][0]; // Store only indices
     }
-    printf("The nearest neighbors to this sample are %d, %d, %d, %d, %d", kNearestNeighbors[0],kNearestNeighbors[1],kNearestNeighbors[2],kNearestNeighbors[3],kNearestNeighbors[4]);
 }
 
 /*TASK 4: */
@@ -164,14 +163,12 @@ int predictClass (struct Animal dataZoo [NUM_SAMPLES], int newSample [NUM_FEATUR
     findKNearestNeighbors(dataZoo, newSample, k, whichDistanceFunction, kNearestNeighbors);
 
     // Count occurrences of each class label in k nearest neighbors
+    
     for (int i = 0; i < k; i++) {
         tempClassLabel = dataZoo[kNearestNeighbors[i]-1].classLabel;   // -1 fixes weird indexing issue where it accesses the index after for some reason 
-        printf("\nClass label for index %d: %d", kNearestNeighbors[i], tempClassLabel);
         classFrequency[tempClassLabel]++; // Increment count for this class
     }
-    for (int i = 0; i < NUM_CLASSES; i++) {
-        printf("\n%d", classFrequency[i]);
-    }
+
 
     // Find the most frequent class label (use smallest in case of tie)
     for (int i = 0; i < NUM_CLASSES; i++) {
