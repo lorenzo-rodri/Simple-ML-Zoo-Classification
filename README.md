@@ -18,5 +18,5 @@ This project implements a simple machine learning task using the k-nearest neigh
 2. Ensure you have a C compiler.
 3. Run `make` to compile the program.
 
-### Additional Info:
+## Additional Info:
 This project is for educational purposes.
