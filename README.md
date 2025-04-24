@@ -17,3 +17,6 @@ This project implements a simple machine learning task using the k-nearest neigh
 1. Clone this repository to your local machine.
 2. Ensure you have a C compiler.
 3. Run `make` to compile the program.
+
+## Additional Info:
+This project is for educational purposes.
